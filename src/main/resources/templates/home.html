@@ -8,6 +8,10 @@
     $!{value2} ## 如果不存在，强制为空
     ${value3}
 
+    #foreach($vo in $vos)
+        $!{vo.question.createdDate}
+    #end
+
     colors: $!{colors}
 
     #foreach($color in $colors)

@@ -1,7 +1,7 @@
 package com.wonder.model;
 
 /**
- * @Author: blank
+ * @Author: wonder
  * @Date: 2019/12/29
  */
 public class User {

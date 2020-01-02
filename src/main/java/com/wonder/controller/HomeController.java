@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author: blank
+ * @Author: wonder
  * @Date: 2020/1/1
  */
 @Controller
@@ -35,8 +35,8 @@ public class HomeController {
         List<ViewObject> vos = new ArrayList<>();
         for (Question question:questions) {
             ViewObject vo = new ViewObject();
-            vo.setViewObject("question",question);
-            vo.setViewObject("user",userService.getUser(question.getUserId()));
+            vo.set("question",question);
+            vo.set("user",userService.getUser(question.getUserId()));
 
             vos.add(vo);
         }
@@ -44,10 +44,10 @@ public class HomeController {
     }
     @RequestMapping(path = {"/index","/"},method = RequestMethod.GET)
     public String index(Model model){
-        model.addAttribute("vos",getQuestions(0,0,10));
+        model.addAttribute("vos",getQuestions(1,0,10));
         return "index";
     }
-    @RequestMapping(path = {"/user/{userId}"},method = RequestMethod.GET)
+    @RequestMapping(path = {"/user/{userId}"},method = {RequestMethod.GET,RequestMethod.POST})
     public String userIndex(Model model,
                             @PathVariable("userId")int userId){
         model.addAttribute("vos",getQuestions(userId,0,10));

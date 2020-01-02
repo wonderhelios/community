@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.Random;
 
 /**
- * @Author: blank
- * @Date: 2019/12/31 9:44 上午
+ * @Author: wonder
+ * @Date: 2019/12/31
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = CommunityApplication.class)
@@ -32,11 +32,11 @@ public class InitDatabaseTests {
     @Test
     public void contextLoads(){
         Random random = new Random();
-        for(int i=0;i<5;i++){
+        for(int i=0;i<15;i++){
             User user = new User();
             user.setName(String.format("user%d",i));
             user.setPassword("123");
-            user.setHeadUrl(String.format("https://images.wonder.com/head/%dt.img",random.nextInt(1000)));
+            user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png",random.nextInt(1000)));
             user.setSalt("");
 
             userDAO.addUser(user);
