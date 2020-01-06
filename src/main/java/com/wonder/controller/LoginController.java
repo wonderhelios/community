@@ -1,19 +1,16 @@
 package com.wonder.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.wonder.service.UserService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -32,6 +29,7 @@ public class LoginController {
     public String reg(Model model,
                       @RequestParam("username")String username,
                       @RequestParam("password")String password,
+                      @RequestParam(value = "next",required = false)String next,
                       @RequestParam(value = "remember",defaultValue = "false")boolean rememberme,
                       HttpServletResponse response){
         try{
@@ -43,6 +41,9 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 7);
                 }
                 response.addCookie(cookie);
+                if(StringUtils.isNotBlank(next)){
+                    return "redirect:" + next;
+                }
                 return "redirect:/";
             }else{
                 model.addAttribute("msg",map.get("msg"));
@@ -62,6 +63,7 @@ public class LoginController {
     @RequestMapping(path = {"/login/"},method = RequestMethod.POST)
     public String login(Model model, @RequestParam("username")String username,
                         @RequestParam("password")String password,
+                        @RequestParam(value = "next",required = false)String next,
                         @RequestParam(value = "rememberme",defaultValue = "false")boolean rememberme,
                         HttpServletResponse response){
         try{
@@ -74,6 +76,9 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 7);
                 }
                 response.addCookie(cookie);
+                if(StringUtils.isNotBlank(next)){
+                    return "redirect:" + next;
+                }
                 return "redirect:/";
             }else{
                 model.addAttribute("msg",map.get("msg"));
