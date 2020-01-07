@@ -44,7 +44,7 @@ public class HomeController {
     }
     @RequestMapping(path = {"/index","/"},method = RequestMethod.GET)
     public String index(Model model){
-        model.addAttribute("vos",getQuestions(1,0,10));
+        model.addAttribute("vos",getQuestions(0,0,10));
         return "index";
     }
     @RequestMapping(path = {"/user/{userId}"},method = {RequestMethod.GET,RequestMethod.POST})
