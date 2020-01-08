@@ -40,7 +40,8 @@ public class QuestionController {
             question.setCreatedDate(new Date());
             question.setCommentCount(0);
             if(hostHolder.getUser() == null){
-                question.setUserId(WonserUtils.ANNOYMOUS_USERID);
+//                question.setUserId(WonserUtils.ANNOYMOUS_USERID);
+                return WonserUtils.getJSONString(999);
             }else{
                 question.setUserId(hostHolder.getUser().getId());
             }
