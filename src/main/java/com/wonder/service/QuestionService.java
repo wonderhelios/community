@@ -33,4 +33,11 @@ public class QuestionService {
 
         return questionDAO.addQuestion(question) > 0 ? question.getUserId() : 0;
     }
+    public int updateCommentCount(int id,int commentCount){
+        return questionDAO.updateCommentCount(id,commentCount);
+    }
+    public Question getQuestionById(int id){
+        return questionDAO.selectQuestionById(id);
+    }
+
 }

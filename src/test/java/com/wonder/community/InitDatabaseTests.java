@@ -5,6 +5,8 @@ import com.wonder.dao.QuestionDAO;
 import com.wonder.dao.UserDAO;
 import com.wonder.model.Question;
 import com.wonder.model.User;
+import com.wonder.service.QuestionService;
+import com.wonder.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,14 @@ public class InitDatabaseTests {
 
     @Autowired
     UserDAO userDAO;
+
     @Autowired
-    QuestionDAO questionDao;
+    QuestionDAO questionDAO;
 
     @Test
     public void contextLoads(){
         Random random = new Random();
-        for(int i=0;i<15;i++){
+        for(int i=1;i<=15;i++){
             User user = new User();
             user.setName(String.format("user%d",i));
             user.setPassword("123");
@@ -50,7 +53,7 @@ public class InitDatabaseTests {
             question.setTitle(String.format("TITLE{%d}",i));
             question.setContent(String.format("sdfsdfsfsfd Content%d",i));
 
-            questionDao.addQuestion(question);
+            questionDAO.addQuestion(question);
 
         }
 //        User user = new User();
@@ -62,7 +65,7 @@ public class InitDatabaseTests {
 //
 //        user.setPassword("blank");
 //        userDAO.updatePassword(user);
-        userDAO.deleteById(6);
+//        userDAO.deleteById(6);
 
     }
 }
