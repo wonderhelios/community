@@ -92,8 +92,11 @@ public class UserService {
         loginTicketDAO.addTicket(ticket);
         return ticket.getTicket();
     }
-    public User getUser(int id){
+    public User selectUserById(int id){
         return userDAO.selectById(id);
+    }
+    public User selectUserByName(String name){
+        return userDAO.selectByName(name);
     }
     public void logout(String ticket){
         loginTicketDAO.updateStatus(ticket,1);
