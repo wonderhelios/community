@@ -3,16 +3,14 @@ package com.wonder.controller;
 import com.wonder.model.Comment;
 import com.wonder.model.EntityType;
 import com.wonder.model.HostHolder;
-import com.wonder.model.Question;
 import com.wonder.service.CommentService;
 import com.wonder.service.QuestionService;
 import com.wonder.service.SensitiveService;
-import com.wonder.util.WonserUtils;
+import com.wonder.util.WonderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,7 +51,7 @@ public class CommentController {
             comment.setEntityType(EntityType.ENTITY_QUESTION);
             comment.setStatus(0);
             if(null == hostHolder.getUser()){
-                comment.setUserId(WonserUtils.ANNOYMOUS_USERID);
+                comment.setUserId(WonderUtils.ANNOYMOUS_USERID);
             }else {
                 comment.setUserId(hostHolder.getUser().getId());
             }

@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
  * @Author: wonder
  * @Date: 2020/1/7
  */
-public class WonserUtils {
+public class WonderUtils {
 
     public static final int ANNOYMOUS_USERID = 6;
 

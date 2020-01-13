@@ -30,8 +30,12 @@ public interface CommentDAO {
             " where entity_id=#{entityId} and entity_type=#{entityType}"})
     int getCommentCount(@Param("entityId")int entityId,
                         @Param("entityType")int entityType);
+
     @Select({"select * from ",TABLE_NAME,
             " where entity_id=#{entityId} and entity_type=#{entityType}"})
     List<Comment> getCommentByEntity(@Param("entityId")int entityId,
                                      @Param("entityType")int entityType);
+    @Select({"select * from ",TABLE_NAME,
+            " where id=#{commentId}"})
+    Comment getCommentById(@Param("commentId")int commentId);
 }

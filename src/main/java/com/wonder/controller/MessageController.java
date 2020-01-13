@@ -6,7 +6,7 @@ import com.wonder.model.User;
 import com.wonder.model.ViewObject;
 import com.wonder.service.MessageService;
 import com.wonder.service.UserService;
-import com.wonder.util.WonserUtils;
+import com.wonder.util.WonderUtils;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,10 +66,10 @@ public class MessageController {
                              @RequestParam("content")String content){
         try {
             if(hostHolder.getUser() == null){
-                return WonserUtils.getJSONString(999,"未登录");
+                return WonderUtils.getJSONString(999,"未登录");
             }
             if(userService.selectUserByName(toName) == null){
-                return WonserUtils.getJSONString(1,"用户不存在");
+                return WonderUtils.getJSONString(1,"用户不存在");
             }
             Message message = new Message();
             int fromId = hostHolder.getUser().getId();
@@ -82,10 +82,10 @@ public class MessageController {
             message.setConversationId(fromId < toId ? String.format("%d_%d",fromId,toId):String.format("%d_%d",toId,fromId));
 
             messageService.addMessage(message);
-            return WonserUtils.getJSONString(0);
+            return WonderUtils.getJSONString(0);
         }catch (Exception e){
             logger.error("添加站内信失败:" + e.getMessage());
-            return WonserUtils.getJSONString(1,"添加站内信失败");
+            return WonderUtils.getJSONString(1,"添加站内信失败");
         }
     }
     @RequestMapping(value = "/msg/detail",method = RequestMethod.GET)

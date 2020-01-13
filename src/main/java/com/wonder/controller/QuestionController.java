@@ -1,12 +1,11 @@
 package com.wonder.controller;
 
-import com.wonder.dao.QuestionDAO;
-import com.wonder.dao.UserDAO;
 import com.wonder.model.*;
 import com.wonder.service.CommentService;
+import com.wonder.service.LikeService;
 import com.wonder.service.QuestionService;
 import com.wonder.service.UserService;
-import com.wonder.util.WonserUtils;
+import com.wonder.util.WonderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,8 @@ public class QuestionController {
     HostHolder hostHolder;
     @Autowired
     UserService userService;
+    @Autowired
+    LikeService likeService;
 
     @RequestMapping(value = "/question/add",method = RequestMethod.POST)
     @ResponseBody
@@ -47,19 +48,19 @@ public class QuestionController {
             question.setCommentCount(0);
             if(hostHolder.getUser() == null){
 //              question.setUserId(WonserUtils.ANNOYMOUS_USERID);
-                return WonserUtils.getJSONString(999);
+                return WonderUtils.getJSONString(999);
             }else{
                 question.setUserId(hostHolder.getUser().getId());
             }
             if(questionService.addQuestion(question) > 0){
-                return WonserUtils.getJSONString(0);
+                return WonderUtils.getJSONString(0);
             }
             questionService.addQuestion(question);
 
         }catch (Exception e){
             logger.error("增加问题失败:" + e.getMessage());
         }
-        return WonserUtils.getJSONString(1,"失败");
+        return WonderUtils.getJSONString(1,"失败");
     }
     @RequestMapping(value = "/question/{qid}",method = RequestMethod.GET)
     public String questionDetail(Model model,
@@ -74,6 +75,14 @@ public class QuestionController {
             ViewObject vo = new ViewObject();
             vo.set("comment",comment);
             vo.set("user",userService.selectUserById(comment.getUserId()));
+
+            if(hostHolder.getUser() == null){
+                vo.set("liked",0);
+            }else{
+                vo.set("liked",likeService.getLikeStatus(hostHolder.getUser().getId(),
+                        EntityType.ENTITY_COMMENT,comment.getId()));
+            }
+            vo.set("likeCount",likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
             vos.add(vo);
         }
         model.addAttribute("comments",vos);
