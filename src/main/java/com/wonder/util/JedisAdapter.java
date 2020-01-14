@@ -23,15 +23,16 @@ public class JedisAdapter implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        pool = new JedisPool("redis://localhost:6379/1");
+        pool = new JedisPool("redis://localhost:6379");
     }
 
     public static void main(String[] args) {
-        JedisPool pool = new JedisPool("redis://localhost:6379/1");
+        JedisPool pool = new JedisPool("redis://localhost:6379");
 
         Jedis jedis = null;
         try{
             jedis = pool.getResource();
+            jedis.lpush("hello","world");
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -103,7 +104,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.brpop(timeout,key);
         }catch (Exception e){
-            logger.error("数据异常:" + e.getMessage());
+            logger.error("Pop数据异常:" + e.getMessage());
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -117,7 +118,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.lpush(key,value);
         }catch (Exception e){
-            logger.error("数据异常:" + e.getMessage());
+            logger.error("Push数据异常:" + e.getMessage());
         }finally {
             if(jedis != null){
                 jedis.close();

@@ -1,5 +1,8 @@
 package com.wonder.controller;
 
+import com.wonder.async.EventModel;
+import com.wonder.async.EventProducer;
+import com.wonder.async.EventType;
 import com.wonder.model.Comment;
 import com.wonder.model.EntityType;
 import com.wonder.model.HostHolder;
@@ -29,6 +32,8 @@ public class LikeController {
     CommentService commentService;
     @Autowired
     LikeService likeService;
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = "/like",method = RequestMethod.POST)
     @ResponseBody
@@ -38,6 +43,13 @@ public class LikeController {
         }
         User user = hostHolder.getUser();
         Comment comment = commentService.getCommentById(commentId);
+
+        eventProducer.fireEvent(new EventModel(EventType.LIKE)
+                                .setActorId(hostHolder.getUser().getId())
+                                .setEntityId(commentId)
+                                .setEntityType(EntityType.ENTITY_COMMENT)
+                                .setEntityOwnerId(comment.getUserId())
+                                .setExt("questionId",String.valueOf(comment.getEntityId())));
 
         long likeCount = likeService.like(user.getId(), EntityType.ENTITY_COMMENT,commentId);
 

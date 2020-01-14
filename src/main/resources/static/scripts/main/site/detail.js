@@ -1,5 +1,5 @@
 (function (window, undefined) {
-    var Action = Base.createClass('main.util.action');
+    var Action = Base.createClass('main.util.Action');
 
     Base.ready({
         initialize: fInitialize,
@@ -12,7 +12,7 @@
 
     function fInitialize() {
         var that = this;
-    }
+    };
 
     function fVote(oEvent) {
         var that = this;
@@ -48,12 +48,12 @@
                 that.isVote = false;
             }
         });
-    }
+    };
 
     function fUnlike(oEvent) {
         var that = this;
         var oEl = $(oEvent.currentTarget);
 
-    }
+    };
 
 })(window);
