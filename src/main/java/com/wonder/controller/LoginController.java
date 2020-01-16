@@ -1,5 +1,9 @@
 package com.wonder.controller;
 
+import com.wonder.async.EventHandler;
+import com.wonder.async.EventModel;
+import com.wonder.async.EventProducer;
+import com.wonder.async.EventType;
 import com.wonder.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -25,6 +29,8 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = "/reg/",method = RequestMethod.POST)
     public String reg(Model model,
@@ -77,6 +83,11 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 7);
                 }
                 response.addCookie(cookie);
+
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+                                        .setExt("username",username)
+                                        .setExt("email","976563760@qq.com"));
+
                 if(StringUtils.isNotBlank(next)){
                     return "redirect:" + next;
                 }
