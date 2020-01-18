@@ -2,10 +2,7 @@ package com.wonder.dao;
 
 import com.wonder.model.Comment;
 import com.wonder.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -31,10 +28,15 @@ public interface CommentDAO {
     int getCommentCount(@Param("entityId")int entityId,
                         @Param("entityType")int entityType);
 
+    @Select({"select count(id) from ",TABLE_NAME,
+            " where user_id=#{userId}"})
+    int getUserCommentCount(@Param("userId")int userId);
+
     @Select({"select * from ",TABLE_NAME,
             " where entity_id=#{entityId} and entity_type=#{entityType}"})
     List<Comment> getCommentByEntity(@Param("entityId")int entityId,
                                      @Param("entityType")int entityType);
+
     @Select({"select * from ",TABLE_NAME,
             " where id=#{commentId}"})
     Comment getCommentById(@Param("commentId")int commentId);

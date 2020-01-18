@@ -14,4 +14,8 @@ public class EntityType {
      * 代表评论模块
      */
     public static final int ENTITY_COMMENT = 1;
+    /**
+     * 代表用户
+     */
+    public static final int ENTITY_USER = 2;
 }

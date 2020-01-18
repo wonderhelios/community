@@ -3,8 +3,10 @@ package com.wonder.community;
 import com.wonder.CommunityApplication;
 import com.wonder.dao.QuestionDAO;
 import com.wonder.dao.UserDAO;
+import com.wonder.model.EntityType;
 import com.wonder.model.Question;
 import com.wonder.model.User;
+import com.wonder.service.FollowService;
 import com.wonder.service.QuestionService;
 import com.wonder.service.UserService;
 import org.junit.Test;
@@ -31,6 +33,9 @@ public class InitDatabaseTests {
 
     @Autowired
     QuestionDAO questionDAO;
+
+    @Autowired
+    FollowService followService;
 
     @Test
     public void contextLoads(){
@@ -67,5 +72,13 @@ public class InitDatabaseTests {
 //        userDAO.updatePassword(user);
 //        userDAO.deleteById(6);
 
+    }
+    @Test
+    public void addFollowing(){
+        for(int i=0;i<10;i++) {
+            for (int j = 1; j < i; j++) {
+                followService.follow(j, EntityType.ENTITY_USER,i);
+            }
+        }
     }
 }
