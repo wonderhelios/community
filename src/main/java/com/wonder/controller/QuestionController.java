@@ -1,10 +1,7 @@
 package com.wonder.controller;
 
 import com.wonder.model.*;
-import com.wonder.service.CommentService;
-import com.wonder.service.LikeService;
-import com.wonder.service.QuestionService;
-import com.wonder.service.UserService;
+import com.wonder.service.*;
 import com.wonder.util.WonderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +32,8 @@ public class QuestionController {
     UserService userService;
     @Autowired
     LikeService likeService;
+    @Autowired
+    FollowService followService;
 
     @RequestMapping(value = "/question/add",method = RequestMethod.POST)
     @ResponseBody
@@ -64,12 +63,12 @@ public class QuestionController {
     }
     @RequestMapping(value = "/question/{qid}",method = RequestMethod.GET)
     public String questionDetail(Model model,
-                                 @PathVariable("qid")int qit){
-        Question question = questionService.getQuestionById(qit);
+                                 @PathVariable("qid")int qid){
+        Question question = questionService.getQuestionById(qid);
         model.addAttribute("question",question);
         model.addAttribute("user",userService.selectUserById(question.getUserId()));
 
-        List<Comment> commentList = commentService.getCommentByEntity(qit, EntityType.ENTITY_QUESTION);
+        List<Comment> commentList = commentService.getCommentByEntity(qid, EntityType.ENTITY_QUESTION);
         List<ViewObject> vos = new ArrayList<>();
         for (Comment comment:commentList){
             ViewObject vo = new ViewObject();
@@ -86,6 +85,25 @@ public class QuestionController {
             vos.add(vo);
         }
         model.addAttribute("comments",vos);
+        List<ViewObject> followUsers = new ArrayList<>();
+        List<Integer> users = followService.getFollowers(EntityType.ENTITY_QUESTION,qid,20);
+        for(Integer userId:users){
+            ViewObject vo = new ViewObject();
+            User u = userService.selectUserById(userId);
+            if(u == null){
+                continue;
+            }
+            vo.set("name",u.getName());
+            vo.set("headUrl",u.getHeadUrl());
+            vo.set("id",u.getId());
+            followUsers.add(vo);
+        }
+        if(hostHolder.getUser() != null){
+            model.addAttribute("followed",
+                    followService.isFollower(hostHolder.getUser().getId(),EntityType.ENTITY_QUESTION,qid));
+        }else{
+            model.addAttribute("followed",false);
+        }
         return "detail";
     }
 }

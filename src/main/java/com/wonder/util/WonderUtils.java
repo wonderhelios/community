@@ -11,6 +11,7 @@ import java.util.Map;
 public class WonderUtils {
 
     public static final int ANNOYMOUS_USERID = 6;
+    public static final int SYSTEM_USERID = 7;
 
     public static String getJSONString(int code) {
         JSONObject json = new JSONObject();

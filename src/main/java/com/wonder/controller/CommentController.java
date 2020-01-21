@@ -1,5 +1,8 @@
 package com.wonder.controller;
 
+import com.wonder.async.EventModel;
+import com.wonder.async.EventProducer;
+import com.wonder.async.EventType;
 import com.wonder.model.Comment;
 import com.wonder.model.EntityType;
 import com.wonder.model.HostHolder;
@@ -35,6 +38,8 @@ public class CommentController {
     HostHolder hostHolder;
     @Autowired
     QuestionService questionService;
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = {"/addComment"},method = RequestMethod.POST)
     public String addComment(@RequestParam("questionId")int questionId,
@@ -59,6 +64,10 @@ public class CommentController {
             //更新题目区里的评论数
             int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityType(),count);
+
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getUserId())
+                    .setEntityId(questionId));
+
         }catch (Exception e){
             logger.error("添加评论失败:" + e.getMessage());
         }
