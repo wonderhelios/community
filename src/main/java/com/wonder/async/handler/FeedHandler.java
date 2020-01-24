@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.wonder.async.EventHandler;
 import com.wonder.async.EventModel;
 import com.wonder.async.EventType;
-import com.wonder.model.EntityType;
+import com.wonder.constant.EntityTypeConst;
 import com.wonder.model.Feed;
 import com.wonder.model.Question;
 import com.wonder.model.User;
-import com.wonder.service.FeedService;
-import com.wonder.service.FollowService;
-import com.wonder.service.QuestionService;
-import com.wonder.service.UserService;
+import com.wonder.service.impl.FeedServiceImpl;
+import com.wonder.service.impl.FollowServiceImpl;
+import com.wonder.service.impl.QuestionServiceImpl;
+import com.wonder.service.impl.UserServiceImpl;
 import com.wonder.util.JedisAdapter;
 import com.wonder.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +27,19 @@ import java.util.*;
 public class FeedHandler implements EventHandler {
 
     @Autowired
-    UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
-    QuestionService questionService;
+    private QuestionServiceImpl questionServiceImpl;
     @Autowired
-    FeedService feedService;
+    private FeedServiceImpl feedServiceImpl;
     @Autowired
-    FollowService followService;
+    private FollowServiceImpl followServiceImpl;
     @Autowired
-    JedisAdapter jedisAdapter;
+    private JedisAdapter jedisAdapter;
 
     private String buildData(EventModel model) {
-        Map<String, String> map = new HashMap<>();
-        User actor = userService.selectUserById(model.getActorId());
+        Map<String, String> map = new HashMap<>(10);
+        User actor = userServiceImpl.selectUserById(model.getActorId());
         if (actor == null) {
             return null;
         }
@@ -47,9 +47,11 @@ public class FeedHandler implements EventHandler {
         map.put("userHead", actor.getHeadUrl());
         map.put("userName", actor.getName());
 
-        if (model.getType() == EventType.COMMENT ||
-                (model.getType() == EventType.FOLLOW && model.getEntityType() == EntityType.ENTITY_QUESTION)) {
-            Question question = questionService.getQuestionById(model.getEntityId());
+        boolean isCanHandleType = (model.getType() == EventType.COMMENT ||
+                (model.getType() == EventType.FOLLOW && model.getEntityType() == EntityTypeConst.ENTITY_QUESTION));
+
+        if (isCanHandleType) {
+            Question question = questionServiceImpl.getQuestionById(model.getEntityId());
             if(question == null){
                 return null;
             }
@@ -71,9 +73,9 @@ public class FeedHandler implements EventHandler {
         if(feed.getData() == null){
             return;
         }
-        feedService.addFeed(feed);
+        feedServiceImpl.addFeed(feed);
         //获取所有粉丝
-        List<Integer> followers = followService.getFollowers(EntityType.ENTITY_USER,model.getActorId(),Integer.MAX_VALUE);
+        List<Integer> followers = followServiceImpl.getFollowers(EntityTypeConst.ENTITY_USER,model.getActorId(),Integer.MAX_VALUE);
         followers.add(0);
         for(int follower : followers){
             String timelineKey = RedisKeyUtil.getTimelineKey(follower);

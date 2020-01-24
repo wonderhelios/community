@@ -23,11 +23,11 @@ import java.util.Date;
 public class PassportInterceptor implements HandlerInterceptor {
 
     @Autowired
-    UserDAO userDAO;
+    private UserDAO userDAO;
     @Autowired
-    LoginTicketDAO loginTicketDAO;
+    private LoginTicketDAO loginTicketDAO;
     @Autowired
-    HostHolder hostHolder;
+    private HostHolder hostHolder;
 
 
     @Override
@@ -35,7 +35,7 @@ public class PassportInterceptor implements HandlerInterceptor {
         String ticket = null;
         if(httpServletRequest.getCookies() != null){
             for(Cookie cookie:httpServletRequest.getCookies()){
-                if(cookie.getName().equals("ticket")){
+                if("ticket".equals(cookie.getName())){
                     ticket = cookie.getValue();
                     break;
                 }

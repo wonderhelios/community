@@ -1,10 +1,10 @@
-package com.wonder.model;
+package com.wonder.constant;
 
 /**
  * @Author: wonder
  * @Date: 2020/1/10
  */
-public class EntityType {
+public class EntityTypeConst {
 
     /**
      * 代表问题模块

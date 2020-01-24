@@ -1,10 +1,11 @@
 package com.wonder.controller;
 
+import com.wonder.constant.EntityTypeConst;
 import com.wonder.model.*;
-import com.wonder.service.CommentService;
-import com.wonder.service.FollowService;
-import com.wonder.service.QuestionService;
-import com.wonder.service.UserService;
+import com.wonder.service.impl.CommentServiceImpl;
+import com.wonder.service.impl.FollowServiceImpl;
+import com.wonder.service.impl.QuestionServiceImpl;
+import com.wonder.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,25 +27,25 @@ public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
-    UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
-    QuestionService questionService;
+    private QuestionServiceImpl questionServiceImpl;
     @Autowired
-    FollowService followService;
+    private FollowServiceImpl followServiceImpl;
     @Autowired
-    CommentService commentService;
+    private CommentServiceImpl commentServiceImpl;
     @Autowired
-    HostHolder hostHolder;
+    private HostHolder hostHolder;
 
     private List<ViewObject> getQuestions(int userId,int offset,int limit){
-        List<Question> questions = questionService.getLatestQuestion(userId,offset,limit);
+        List<Question> questions = questionServiceImpl.getLatestQuestion(userId,offset,limit);
         List<ViewObject> vos = new ArrayList<>();
         for (Question question:questions) {
             ViewObject vo = new ViewObject();
             vo.set("question",question);
-            vo.set("followCount",followService.getFollowerCount(EntityType.ENTITY_QUESTION,
+            vo.set("followCount", followServiceImpl.getFollowerCount(EntityTypeConst.ENTITY_QUESTION,
                     question.getId()));
-            vo.set("user",userService.selectUserById(question.getUserId()));
+            vo.set("user", userServiceImpl.selectUserById(question.getUserId()));
 
             vos.add(vo);
         }
@@ -60,14 +60,14 @@ public class HomeController {
     public String userIndex(Model model,
                             @PathVariable("userId")int userId){
         model.addAttribute("vos",getQuestions(userId,0,10));
-        User user = userService.selectUserById(userId);
+        User user = userServiceImpl.selectUserById(userId);
         ViewObject vo = new ViewObject();
         vo.set("user",user);
-        vo.set("commentCount",commentService.getUserCommentCount(userId));
-        vo.set("followerCount",followService.getFollowerCount(EntityType.ENTITY_USER,userId));
-        vo.set("followingCount",followService.getFollowingCount(userId,EntityType.ENTITY_USER));
+        vo.set("commentCount", commentServiceImpl.getUserCommentCount(userId));
+        vo.set("followerCount", followServiceImpl.getFollowerCount(EntityTypeConst.ENTITY_USER,userId));
+        vo.set("followingCount", followServiceImpl.getFollowingCount(userId, EntityTypeConst.ENTITY_USER));
         if(hostHolder.getUser() != null){
-            vo.set("followed",followService.isFollower(hostHolder.getUser().getId(),EntityType.ENTITY_USER,userId));
+            vo.set("followed", followServiceImpl.isFollower(hostHolder.getUser().getId(), EntityTypeConst.ENTITY_USER,userId));
         }else{
             vo.set("followed",false);
         }

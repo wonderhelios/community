@@ -1,19 +1,14 @@
 package com.wonder.util;
 
+import com.wonder.constant.RedisKeyConst;
+
+import static com.wonder.constant.RedisKeyConst.*;
+
 /**
  * @Author: wonder
  * @Date: 2020/1/13
  */
 public class RedisKeyUtil {
-    private final static String SPLIT = ":";
-    private final static String BIZ_LIKE = "LIKE";
-    private final static String BIZ_DISLIKE = "DISLIKE";
-    private final static String BIZ_EVENTQUEUE = "EVENTQUEUE";
-    /** 粉丝 **/
-    private final static String BIZ_FOLLOWER = "FOLLOWER";
-    /** 关注对象 **/
-    private final static String BIZ_FOLLOWING = "FOLLOWING";
-    private final static String BIZ_TIMELINE = "TIMELINE";
 
     public static String getLikeKey(int entityType,int entityId){
         return BIZ_LIKE + SPLIT + String.valueOf(entityType) + SPLIT + String.valueOf(entityId);

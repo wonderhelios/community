@@ -1,35 +1,45 @@
 package com.wonder.service;
 
-import com.wonder.dao.MessageDAO;
 import com.wonder.model.Message;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @Author: wonder
- * @Date: 2020/1/11
+ * @Date: 2020/1/24
  */
-@Service
-public class MessageService {
+public interface MessageService {
 
-    @Autowired
-    MessageDAO messageDAO;
-    @Autowired
-    SensitiveService sensitiveService;
+    /**
+     * 添加消息
+     * @param message
+     * @return
+     */
+    int addMessage(Message message);
 
-    public int addMessage(Message message){
-        message.setContent(sensitiveService.filter(message.getContent()));
-        return messageDAO.addMessage(message);
-    }
-    public List<Message> getConversationDetail(String conversationId,int offset,int limit){
-        return messageDAO.getConversationDetail(conversationId,offset,limit);
-    }
-    public List<Message> getConversationList(int userId,int offset,int limit){
-        return messageDAO.getConversationList(userId,offset,limit);
-    }
-    public int getConversationCount(int userId,String conversationId){
-        return messageDAO.getConversationCount(userId,conversationId);
-    }
+    /**
+     * 获取会话详情
+     * @param conversationId
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Message> getConversationDetail(String conversationId,int offset,int limit);
+
+    /**
+     * 获取会话列表
+     * @param userId
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Message> getConversationList(int userId, int offset, int limit);
+
+    /**
+     * 获取会话数量
+     * @param userId
+     * @param conversationId
+     * @return
+     */
+    int getConversationCount(int userId,String conversationId);
 }

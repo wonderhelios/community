@@ -30,7 +30,7 @@ public class EventComsumer implements InitializingBean, ApplicationContextAware 
     private ApplicationContext applicationContext;
 
     @Autowired
-    JedisAdapter jedisAdapter;
+    private JedisAdapter jedisAdapter;
 
     @Override
     public void afterPropertiesSet() throws Exception {

@@ -1,53 +1,44 @@
 package com.wonder.service;
 
-import com.wonder.util.JedisAdapter;
-import com.wonder.util.RedisKeyUtil;
-import com.wonder.util.WonderUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 /**
  * @Author: wonder
- * @Date: 2020/1/13
+ * @Date: 2020/1/24
  */
-@Service
-public class LikeService {
-    @Autowired
-    JedisAdapter jedisAdapter;
+public interface LikeService {
 
-    public long getLikeCount(int entityType,int entityId){
-        String likeKey = RedisKeyUtil.getLikeKey(entityType,entityId);
-        return jedisAdapter.scard(likeKey);
-    }
-    public long getLikeStatus(int userId,int entityType,int entityId){
-        String likeKey = RedisKeyUtil.getLikeKey(entityType,entityId);
-        if(jedisAdapter.sismember(likeKey,String.valueOf(userId))){
-            return 1;
-        }
-        String disLikeKey = RedisKeyUtil.getDisLikeKey(entityType,entityId);
-        if(jedisAdapter.sismember(disLikeKey,String.valueOf(userId))){
-            return -1;
-        }
-        return 0;
-    }
-    public long like(int userId,int entityType,int entityId){
-        String likeKey = RedisKeyUtil.getLikeKey(entityType,entityId);
-        jedisAdapter.sadd(likeKey,String.valueOf(userId));
+    /**
+     * 获取赞的数量
+     * @param entityType
+     * @param entityId
+     * @return
+     */
+    long getLikeCount(int entityType,int entityId);
 
-        String disLikeKey = RedisKeyUtil.getDisLikeKey(entityType,entityId);
-        jedisAdapter.srem(disLikeKey,String.valueOf(userId));
+    /**
+     * 获取赞的状态
+     * @param userId
+     * @param entityType
+     * @param entityId
+     * @return
+     */
+    long getLikeStatus(int userId,int entityType,int entityId);
 
-        return jedisAdapter.scard(likeKey);
-    }
-    public long disLike(int userId,int entityType,int entityId){
-        String likeKey = RedisKeyUtil.getLikeKey(entityType,entityId);
-        jedisAdapter.srem(likeKey,String.valueOf(userId));
+    /**
+     * 点赞
+     * @param userId
+     * @param entityType
+     * @param entityId
+     * @return
+     */
+    long like(int userId,int entityType,int entityId);
 
-        String disLikeKey = RedisKeyUtil.getDisLikeKey(entityType,entityId);
-        jedisAdapter.sadd(disLikeKey,String.valueOf(userId));
-
-        return jedisAdapter.scard(likeKey);
-    }
-
-
+    /**
+     * 点踩
+     * @param userId
+     * @param entityType
+     * @param entityId
+     * @return
+     */
+    long disLike(int userId,int entityType,int entityId);
 }
+

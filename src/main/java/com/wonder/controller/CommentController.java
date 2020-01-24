@@ -3,13 +3,13 @@ package com.wonder.controller;
 import com.wonder.async.EventModel;
 import com.wonder.async.EventProducer;
 import com.wonder.async.EventType;
+import com.wonder.constant.UserConst;
 import com.wonder.model.Comment;
-import com.wonder.model.EntityType;
+import com.wonder.constant.EntityTypeConst;
 import com.wonder.model.HostHolder;
-import com.wonder.service.CommentService;
-import com.wonder.service.QuestionService;
-import com.wonder.service.SensitiveService;
-import com.wonder.util.WonderUtils;
+import com.wonder.service.impl.CommentServiceImpl;
+import com.wonder.service.impl.QuestionServiceImpl;
+import com.wonder.service.impl.SensitiveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +31,15 @@ public class CommentController {
     private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
-    CommentService commentService;
+    private CommentServiceImpl commentServiceImpl;
     @Autowired
-    SensitiveService sensitiveService;
+    private SensitiveService sensitiveService;
     @Autowired
-    HostHolder hostHolder;
+    private HostHolder hostHolder;
     @Autowired
-    QuestionService questionService;
+    private QuestionServiceImpl questionServiceImpl;
     @Autowired
-    EventProducer eventProducer;
+    private EventProducer eventProducer;
 
     @RequestMapping(path = {"/addComment"},method = RequestMethod.POST)
     public String addComment(@RequestParam("questionId")int questionId,
@@ -53,23 +53,23 @@ public class CommentController {
             comment.setContent(content);
             comment.setCreatedDate(new Date());
             comment.setEntityId(questionId);
-            comment.setEntityType(EntityType.ENTITY_QUESTION);
+            comment.setEntityType(EntityTypeConst.ENTITY_QUESTION);
             comment.setStatus(0);
             if(null == hostHolder.getUser()){
-                comment.setUserId(WonderUtils.ANNOYMOUS_USERID);
+                comment.setUserId(UserConst.ANNOYMOUS_USERID);
             }else {
                 comment.setUserId(hostHolder.getUser().getId());
             }
-            commentService.addComment(comment);
+            commentServiceImpl.addComment(comment);
             //更新题目区里的评论数
-            int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
-            questionService.updateCommentCount(comment.getEntityType(),count);
+            int count = commentServiceImpl.getCommentCount(comment.getEntityId(),comment.getEntityType());
+            questionServiceImpl.updateCommentCount(comment.getEntityType(),count);
 
             eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getUserId())
                     .setEntityId(questionId));
 
         }catch (Exception e){
-            logger.error("添加评论失败:" + e.getMessage());
+            logger.error("添加评论失败:",e);
         }
         return "redirect:/question/" + String.valueOf(questionId);
     }

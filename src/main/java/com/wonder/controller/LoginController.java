@@ -1,10 +1,9 @@
 package com.wonder.controller;
 
-import com.wonder.async.EventHandler;
 import com.wonder.async.EventModel;
 import com.wonder.async.EventProducer;
 import com.wonder.async.EventType;
-import com.wonder.service.UserService;
+import com.wonder.service.impl.UserServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -26,11 +24,12 @@ import java.util.Map;
 @Controller
 public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final String TICKET = "ticket";
 
     @Autowired
-    UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
-    EventProducer eventProducer;
+    private EventProducer eventProducer;
 
     @RequestMapping(path = "/reg/",method = RequestMethod.POST)
     public String reg(Model model,
@@ -40,8 +39,8 @@ public class LoginController {
                       @RequestParam(value = "remember",defaultValue = "false")boolean rememberme,
                       HttpServletResponse response){
         try{
-            Map<String,Object> map = userService.register(username,password);
-            if(map.containsKey("ticket")) {
+            Map<String,Object> map = userServiceImpl.register(username,password);
+            if(map.containsKey(TICKET)) {
                 Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
                 cookie.setPath("/");
                 if(rememberme){
@@ -57,7 +56,7 @@ public class LoginController {
                 return "login";
             }
         }catch (Exception e){
-            logger.error("注册异常:" + e.getMessage());
+            logger.error("注册异常:",e);
             model.addAttribute("msg","服务器异常");
             return "login";
         }
@@ -74,9 +73,9 @@ public class LoginController {
                         @RequestParam(value = "rememberme",defaultValue = "false")boolean rememberme,
                         HttpServletResponse response){
         try{
-            Map<String,Object> map = userService.login(username,password);
+            Map<String,Object> map = userServiceImpl.login(username,password);
 
-            if(map.containsKey("ticket")){
+            if(map.containsKey(TICKET)){
                 Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
                 cookie.setPath("/");
                 if(rememberme){
@@ -97,15 +96,14 @@ public class LoginController {
                 return "login";
 
             }
-
         }catch (Exception e){
-            logger.error("登录异常:" + e.getMessage());
+            logger.error("登录异常:",e);
             return "login";
         }
     }
     @RequestMapping(path = {"/logout"},method = {RequestMethod.GET,RequestMethod.GET})
     public String logout(@CookieValue("ticket")String ticket){
-        userService.logout(ticket);
+        userServiceImpl.logout(ticket);
         return "redirect:/";
     }
 }

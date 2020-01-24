@@ -1,11 +1,10 @@
 package com.wonder.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import com.wonder.model.EntityType;
+import com.wonder.constant.EntityTypeConst;
 import com.wonder.model.Feed;
 import com.wonder.model.HostHolder;
-import com.wonder.service.FeedService;
-import com.wonder.service.FollowService;
+import com.wonder.service.impl.FeedServiceImpl;
+import com.wonder.service.impl.FollowServiceImpl;
 import com.wonder.util.JedisAdapter;
 import com.wonder.util.RedisKeyUtil;
 import org.slf4j.Logger;
@@ -29,13 +28,13 @@ public class FeedController {
 
     private static final Logger logger = LoggerFactory.getLogger(FeedController.class);
     @Autowired
-    HostHolder hostHolder;
+    private HostHolder hostHolder;
     @Autowired
-    JedisAdapter jedisAdapter;
+    private JedisAdapter jedisAdapter;
     @Autowired
-    FeedService feedService;
+    private FeedServiceImpl feedServiceImpl;
     @Autowired
-    FollowService followService;
+    private FollowServiceImpl followServiceImpl;
 
 
     @RequestMapping(path = "/pushfeeds", method = {RequestMethod.GET, RequestMethod.POST})
@@ -44,7 +43,7 @@ public class FeedController {
         List<String> feedIds = jedisAdapter.lrange(RedisKeyUtil.getTimelineKey(localUserId), 0, 10);
         List<Feed> feeds = new ArrayList<>();
         for (String feedId : feedIds) {
-            Feed feed = feedService.getById(Integer.parseInt(feedId));
+            Feed feed = feedServiceImpl.getById(Integer.parseInt(feedId));
             if(feed != null){
                 feeds.add(feed);
             }
@@ -57,9 +56,9 @@ public class FeedController {
         int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
         List<Integer> followings = new ArrayList<>();
         if(localUserId != 0){
-            followings = followService.getFollowings(localUserId, EntityType.ENTITY_USER,Integer.MAX_VALUE);
+            followings = followServiceImpl.getFollowings(localUserId, EntityTypeConst.ENTITY_USER,Integer.MAX_VALUE);
         }
-        List<Feed> feeds = feedService.getUserFeeds(Integer.MAX_VALUE,followings,10);
+        List<Feed> feeds = feedServiceImpl.getUserFeeds(Integer.MAX_VALUE,followings,10);
         model.addAttribute("feeds",feeds);
         return "feeds";
     }

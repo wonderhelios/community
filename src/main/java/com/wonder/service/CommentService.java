@@ -1,45 +1,48 @@
 package com.wonder.service;
 
-import com.sun.deploy.net.HttpUtils;
-import com.wonder.dao.CommentDAO;
 import com.wonder.model.Comment;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
 /**
  * @Author: wonder
- * @Date: 2020/1/10
+ * @Date: 2020/1/24
  */
-@Service
-public class CommentService {
-    @Autowired
-    CommentDAO commentDAO;
+public interface CommentService {
+    /**
+     * 添加评论
+     * @param comment
+     * @return
+     */
+    int addComment(Comment comment);
 
-    @Autowired
-    SensitiveService sensitiveService;
+    /**
+     * 获取评论数量
+     * @param entityId
+     * @param entityType
+     * @return
+     */
+    int getCommentCount(int entityId, int entityType);
 
-    public int addComment(Comment comment){
-        comment.setContent(HtmlUtils.htmlEscape(comment.getContent()));
-        comment.setContent(sensitiveService.filter(comment.getContent()));
+    /**
+     * 根据用户id获取评论数
+     * @param userId
+     * @return
+     */
+    int getUserCommentCount(int userId);
 
-        return commentDAO.addComment(comment) > 0 ? comment.getUserId() : 0;
-    }
-    public int getCommentCount(int entityId,int entityType){
-        return commentDAO.getCommentCount(entityId,entityType);
-    }
+    /**
+     * 根据实体类型获取评论
+     * @param entityId
+     * @param entityType
+     * @return
+     */
+    List<Comment> getCommentByEntity(int entityId, int entityType);
 
-    public int getUserCommentCount(int userId){
-        return commentDAO.getUserCommentCount(userId);
-    }
-
-    public List<Comment> getCommentByEntity(int entityId,int entityType){
-        return commentDAO.getCommentByEntity(entityId,entityType);
-    }
-    public Comment getCommentById(int commentId){
-        return commentDAO.getCommentById(commentId);
-    }
-
+    /**
+     * 根据评论id获取评论
+     * @param commentId
+     * @return
+     */
+    Comment getCommentById(int commentId);
 }

@@ -59,7 +59,7 @@ public class MailSender implements InitializingBean {
 
             Transport.send(message);
         }catch (Exception e){
-            logger.info("发送邮件失败:" + e.getMessage());
+            logger.info("发送邮件失败:",e);
             return false;
         }
         return true;

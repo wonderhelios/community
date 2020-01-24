@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginRequestInterceptor implements HandlerInterceptor {
 
     @Autowired
-    HostHolder hostHolder;
+    private HostHolder hostHolder;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {

@@ -14,9 +14,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Component
 public class WonderWebConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
-    PassportInterceptor passportInterceptor;
+    private PassportInterceptor passportInterceptor;
     @Autowired
-    LoginRequestInterceptor loginRequestInterceptor;
+    private LoginRequestInterceptor loginRequestInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

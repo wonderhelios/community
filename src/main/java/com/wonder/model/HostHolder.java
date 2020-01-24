@@ -1,5 +1,6 @@
 package com.wonder.model;
 
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 /**

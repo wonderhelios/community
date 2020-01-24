@@ -3,12 +3,10 @@ package com.wonder.community;
 import com.wonder.CommunityApplication;
 import com.wonder.dao.QuestionDAO;
 import com.wonder.dao.UserDAO;
-import com.wonder.model.EntityType;
+import com.wonder.constant.EntityTypeConst;
 import com.wonder.model.Question;
 import com.wonder.model.User;
-import com.wonder.service.FollowService;
-import com.wonder.service.QuestionService;
-import com.wonder.service.UserService;
+import com.wonder.service.impl.FollowServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,7 @@ public class InitDatabaseTests {
     QuestionDAO questionDAO;
 
     @Autowired
-    FollowService followService;
+    FollowServiceImpl followServiceImpl;
 
     @Test
     public void contextLoads(){
@@ -77,7 +75,7 @@ public class InitDatabaseTests {
     public void addFollowing(){
         for(int i=0;i<10;i++) {
             for (int j = 1; j < i; j++) {
-                followService.follow(j, EntityType.ENTITY_USER,i);
+                followServiceImpl.follow(j, EntityTypeConst.ENTITY_USER,i);
             }
         }
     }

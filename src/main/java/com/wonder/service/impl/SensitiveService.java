@@ -1,6 +1,5 @@
-package com.wonder.service;
+package com.wonder.service.impl;
 
-import com.wonder.controller.QuestionController;
 import org.apache.commons.lang.CharUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -46,7 +44,7 @@ public class SensitiveService implements InitializingBean {
             }
             bufferedReader.close();
         } catch (Exception e) {
-            logger.error("读取敏感词文件出错:" + e.getMessage());
+            logger.error("读取敏感词文件出错:",e);
         }
     }
 

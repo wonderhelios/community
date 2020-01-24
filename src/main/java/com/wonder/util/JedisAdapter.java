@@ -50,7 +50,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.sadd(key,value);
         }catch (Exception e){
-            logger.error("添加数据异常:" + e.getMessage());
+            logger.error("添加数据异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -64,7 +64,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.srem(key,value);
         }catch (Exception e){
-            logger.error("删除数据异常:" + e.getMessage());
+            logger.error("删除数据异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -78,7 +78,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.scard(key);
         }catch (Exception e){
-            logger.error("统计数据异常:" + e.getMessage());
+            logger.error("统计数据异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -92,7 +92,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.sismember(key,value);
         }catch (Exception e){
-            logger.error("数据异常:" + e.getMessage());
+            logger.error("数据异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -106,7 +106,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.brpop(timeout,key);
         }catch (Exception e){
-            logger.error("Pop数据异常:" + e.getMessage());
+            logger.error("Pop数据异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -120,7 +120,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.lpush(key,value);
         }catch (Exception e){
-            logger.error("Push数据异常:" + e.getMessage());
+            logger.error("Push数据异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -134,7 +134,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.lrange(key,start,end);
         }catch (Exception e){
-            logger.error("数据异常:" + e.getMessage());
+            logger.error("数据异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -148,7 +148,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.zadd(key,score,value);
         }catch (Exception e){
-            logger.error("发生异常:" + e.getMessage());
+            logger.error("发生异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -162,7 +162,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.zrem(key,value);
         }catch (Exception e){
-            logger.error("发生异常:" + e.getMessage());
+            logger.error("发生异常:",e);
         }finally {
             if(jedis != null){
                 jedis.close();
@@ -177,7 +177,7 @@ public class JedisAdapter implements InitializingBean {
         try{
             return jedis.multi();
         }catch (Exception e){
-            logger.error("发生异常:" + e.getMessage());
+            logger.error("发生异常:",e);
         }finally {
         }
         return null;
@@ -186,7 +186,7 @@ public class JedisAdapter implements InitializingBean {
         try{
             return tx.exec();
         }catch (Exception e){
-            logger.error("发生异常:" + e.getMessage());
+            logger.error("发生异常:",e);
             tx.discard();
         }finally {
             if(tx != null){
@@ -208,7 +208,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.zrange(key, start, end);
         } catch (Exception e) {
-            logger.error("发生异常" + e.getMessage());
+            logger.error("发生异常",e);
         } finally {
             if (jedis != null) {
                 jedis.close();
@@ -223,7 +223,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.zrevrange(key, start, end);
         } catch (Exception e) {
-            logger.error("发生异常" + e.getMessage());
+            logger.error("发生异常",e);
         } finally {
             if (jedis != null) {
                 jedis.close();
@@ -238,7 +238,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.zcard(key);
         } catch (Exception e) {
-            logger.error("发生异常" + e.getMessage());
+            logger.error("发生异常",e);
         } finally {
             if (jedis != null) {
                 jedis.close();
@@ -253,7 +253,7 @@ public class JedisAdapter implements InitializingBean {
             jedis = pool.getResource();
             return jedis.zscore(key, member);
         } catch (Exception e) {
-            logger.error("发生异常" + e.getMessage());
+            logger.error("发生异常",e);
         } finally {
             if (jedis != null) {
                 jedis.close();

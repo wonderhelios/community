@@ -7,20 +7,17 @@ import com.wonder.util.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author: wonder
  * @Date: 2020/1/16
  */
 @Component
-public class loginExceptionHandler implements EventHandler {
+public class LoginExceptionHandler implements EventHandler {
 
     @Autowired
-    MailSender mailSender;
+    private MailSender mailSender;
 
     @Override
     public void doHandle(EventModel model) {

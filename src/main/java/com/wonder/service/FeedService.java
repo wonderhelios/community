@@ -1,29 +1,34 @@
 package com.wonder.service;
 
-import com.wonder.dao.FeedDAO;
 import com.wonder.model.Feed;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @Author: wonder
- * @Date: 2020/1/21
+ * @Date: 2020/1/24
  */
-@Service
-public class FeedService {
-    @Autowired
-    FeedDAO feedDAO;
+public interface FeedService {
+    /**
+     * 添加新鲜事
+     * @param feed
+     * @return
+     */
+    boolean addFeed(Feed feed);
 
-    public List<Feed> getUserFeeds(int maxId, List<Integer> userIds, int count){
-        return feedDAO.selectUserFeeds(maxId,userIds,count);
-    }
-    public boolean addFeed(Feed feed){
-        feedDAO.addFeed(feed);
-        return feed.getId() > 0;
-    }
-    public Feed getById(int id){
-        return feedDAO.getFeedById(id);
-    }
+    /**
+     * 获取用户新鲜事
+     * @param maxId
+     * @param userIds
+     * @param count
+     * @return
+     */
+    List<Feed> getUserFeeds(int maxId, List<Integer> userIds, int count);
+
+    /**
+     * 根据新鲜事id获取新鲜事
+     * @param id
+     * @return
+     */
+    Feed getById(int id);
 }
